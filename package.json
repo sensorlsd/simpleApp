@@ -1,0 +1,28 @@
+{
+  "name": "jasmin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine-ts \"spec/jasmine_examples_ts/**.ts",
+    "jas": "node_modules/nodemon/bin/nodemon.js -w dist ./node_modules/.bin/jasmine — config=jasmine.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "mysql": "^2.17.1",
+    "npm": "^6.9.0",
+    "path": "^0.12.7",
+    "xlsx": "^0.14.3"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.3.13",
+    "@types/node": "^12.0.10",
+    "jasmine": "^3.4.0",
+    "jasmine-ts": "^0.3.0",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  }
+}
