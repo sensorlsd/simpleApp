@@ -1,32 +1,15 @@
 import * as fs from "fs";
-import * as http from "http";
 import * as xlsx from "xlsx";
 import {Sheet, WorkBook} from "xlsx";
 import * as path from "path";
-import {setInterval} from "timers";
-
-// http.createServer((req, res) => {
-//    fs.readFile("./supportFiles/htmlFiles/help.html", (err, data) => {
-//        console.log("Server was started");
-//        res.writeHead(200,'{Content-Type: text/html}');
-//        res.write(data);
-//        res.end();
-//    });
-// }).listen(8080);
-
-//Comments
 
 
-let startCell: string = "A3";
-let translation = xlsx.readFile(
-     "C:\\Users\\Dmitry.Nahliuk\\WebstormProjects\\Jasmin\\supportFiles\\xlsxFiles\\FuFarmHelpPage.xlsx");
-
+// Set path to the file and correct sheet
 const workBook: WorkBook = xlsx.readFile(
-    "C:\\Users\\Dmitry.Nahliuk\\WebstormProjects\\Jasmin\\supportFiles\\xlsxFiles\\FuFarmHelpPage.xlsx");
+    "D:\\Programs\\Frameworks\\simpleApp\\supportFiles\\xlsxFiles\\FuFarmHelpPage.xlsx");
 const sheet: Sheet = workBook.Sheets[workBook.SheetNames[0]];
+const line: number = 3;
 
-// console.log(readLine(sheet, 3).slice(1));
-// console.log(readLine(sheet, 4).slice(2));
 
 function readLine(sheet: Sheet, line: number): any[] {
     const snakeConfigKeys: string[] = Object.keys(sheet);
@@ -36,6 +19,7 @@ function readLine(sheet: Sheet, line: number): any[] {
     });
 }
 
+
 function readLineKeys(sheet: Sheet, line: number): any[] {
     const snakeConfigKeys: string[] = Object.keys(sheet);
 
@@ -44,14 +28,15 @@ function readLineKeys(sheet: Sheet, line: number): any[] {
     })
 }
 
-console.log(readColumnKeys(sheet, "B").map((key: string) => {
-    const matchArr: RegExpMatchArray | null  = key.match(/\D+(\d+)/);
-    return matchArr ? matchArr[1] : "";
-}).slice(1).map((key: string) => {
-    return parseInt(key);
-}).map((lineIndex: number) => {
-    return readLine(sheet, lineIndex).slice(1);
-}));
+
+function readColumn(sheet: Sheet, column: string): string[] {
+    const configKey: string[] = Object.keys(sheet);
+
+    return readColumnKeys(sheet, column).map((key:string) => {
+        return sheet[key].v;
+    });
+}
+
 
 function readColumnKeys(sheet: Sheet, column: string): string[] {
     const snakeConfigKeys: string[] = Object.keys(sheet);
@@ -60,3 +45,29 @@ function readColumnKeys(sheet: Sheet, column: string): string[] {
         return value.search(new RegExp(`${column}\\d+$`)) !== -1;
     });
 }
+
+ let multiTranslation: string[][] = readColumnKeys(sheet, "A").map((key: string) => {
+    const matchArr: RegExpMatchArray | null  = key.match(/\D+(\d+)/);
+    return matchArr ? matchArr[1] : "";
+}).slice(1).map((key: string) => {
+    return parseInt(key);
+}).map((lineIndex: number) => {
+    return readLine(sheet, lineIndex).slice(1);
+});
+
+let lang: string[] = readLine(sheet, line);
+let translation: string[] = readColumn(sheet, "B").slice(2);
+
+let fullTranslation: any = {};
+
+for(let i=0; i < multiTranslation.length; i++){
+    for (let j = 0; j < lang.length; j++) {
+        fullTranslation[lang[j]] = [multiTranslation[0][j]]
+
+    }
+}
+// console.log(translation);
+// console.log(lang.length);
+// console.log(multiTranslation[0].length);
+
+console.log(fullTranslation);
